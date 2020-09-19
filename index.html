@@ -1,0 +1,163 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.min.css" />
+    <script
+      src="https://kit.fontawesome.com/a9b3fdd279.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="catalog">
+        <h2 class="nothing" v-if="!items.length">
+          У вас нет никаких рецептов 🥺
+        </h2>
+        <div class="catalog-item" v-for="(item, index) of items" :key="index">
+          <h2 class="catalog-item__title">{{ item.title }}</h2>
+          <img
+            :src="item.imageUrl"
+            :alt="item.title"
+            class="catalog-item__image"
+          />
+          <div class="catalog-item__created">
+            <i class="far fa-calendar-alt"></i>
+            <span>{{ item.created }}</span>
+          </div>
+          <div class="catalog-item__control">
+            <button class="btn-primary" @click.prevent="editRecipe(item.id)">
+              <i class="far fa-edit fa-2x"></i>
+            </button>
+            <button class="btn-primary" @click.prevent="deleteRecipe(item.id)">
+              <i class="far fa-trash-alt fa-2x"></i>
+            </button>
+            <a :href="item.recipeUrl" target="_blank" class="btn-primary">
+              <i class="fas fa-external-link-alt fa-2x"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <form class="form">
+        <h3 class="form__title">Новый рецепт</h3>
+        <span v-if="showError" class="empty"> Введите название рецепта! </span>
+        <input
+          type="text"
+          v-model="defaultRecipe.title"
+          placeholder="Название рецепта"
+          @input="validation"
+        />
+        <input
+          type="text"
+          v-model="defaultRecipe.recipeUrl"
+          placeholder="Ссылка на сайт"
+        />
+        <input
+          type="text"
+          v-model="defaultRecipe.imageUrl"
+          placeholder="Картинка"
+        />
+        <button class="btn-primary" @click.prevent="setRecipe">
+          <i class="far fa-save fa-2x"></i>
+        </button>
+      </form>
+    </div>
+
+    <script>
+      let vue = new Vue({
+        el: "#app",
+        data: {
+          showError: false,
+          defaultRecipe: {
+            title: "",
+            recipeUrl: "",
+            imageUrl: "",
+          },
+          items: JSON.parse(window.localStorage.getItem("items")) || [
+            {
+              id: 1,
+              title: 'Пицца "Классическая"',
+              recipeUrl:
+                "https://www.russianfood.com/recipes/recipe.php?rid=145876",
+              imageUrl: "https://picsum.photos/199/200",
+              created: "21.09.2020",
+            },
+            {
+              id: 2,
+              title: "Суп грибной",
+              recipeUrl:
+                "https://www.russianfood.com/recipes/recipe.php?rid=145876",
+              imageUrl: "https://picsum.photos/201/200",
+              created: "22.10.2020",
+            },
+            {
+              id: 3,
+              title: "Шаверма",
+              recipeUrl:
+                "https://www.russianfood.com/recipes/recipe.php?rid=145876",
+              imageUrl: "https://picsum.photos/200/200",
+              created: "23.07.2020",
+            },
+          ],
+        },
+        methods: {
+          validation() {
+            if (!this.defaultRecipe.title.trim().length) {
+              this.showError = true;
+              return false;
+            } else {
+              this.showError = false;
+              return true;
+            }
+          },
+          setRecipe() {
+            if (this.validation()) {
+              if (this.defaultRecipe.id) {
+                this.items.map((item) => {
+                  if (item.id === this.defaultRecipe.id) {
+                    return { ...item, ...this.defaultRecipe };
+                  } else {
+                    return item;
+                  }
+                });
+              } else {
+                this.items.push({
+                  ...this.defaultRecipe,
+                  recipeUrl:
+                    "https://www.russianfood.com/recipes/recipe.php?rid=145876",
+                  imageUrl: `https://picsum.photos/200/20${
+                    this.items.length + 1
+                  }`,
+                  id: this.items.length + 1,
+                  created: new Date().toLocaleString(),
+                });
+              }
+              this.setToLS();
+              this.defaultRecipe = {
+                title: "",
+                recipeUrl: "",
+                imageUrl: "",
+              };
+            }
+          },
+          editRecipe(id) {
+            this.defaultRecipe = this.items.find((item) => item.id === id);
+          },
+          deleteRecipe(id) {
+            this.items = this.items.filter((item) => item.id !== id);
+            this.setToLS();
+          },
+          setToLS() {
+            window.localStorage.setItem("items", JSON.stringify(this.items));
+          },
+        },
+        computed: {},
+      });
+    </script>
+  </body>
+</html>

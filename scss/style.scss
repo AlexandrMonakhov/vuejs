@@ -1,0 +1,126 @@
+/** @format */
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  padding: 0;
+  margin: 0;
+  background: linear-gradient(
+    252.44deg,
+    rgba(82, 0, 255, 0.73) 0%,
+    rgba(0, 240, 255, 0.72) 100%
+  );
+}
+
+a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.nothing {
+  grid-column-start: span 2;
+  text-align: center;
+}
+
+.empty {
+  color: red;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.btn-primary {
+  padding: 10px;
+  background-color: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 60px;
+  height: 60px;
+  &:hover {
+    cursor: pointer;
+    background-color: #ffffff40;
+  }
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+}
+
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 300px));
+  grid-auto-rows: max-content;
+  grid-gap: 10px;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 10px;
+  width: 50%;
+  overflow-y: auto;
+  &-item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.34);
+    border-radius: 6px;
+    padding: 10px;
+    color: #ffffff;
+    &__control {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 100%;
+    }
+    &__title {
+      text-align: center;
+    }
+    &__image {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+    }
+    &__created {
+      padding: 20px 0px;
+      opacity: 0.7;
+      span {
+        margin-left: 10px;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.form {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.3);
+  &__title {
+    color: #ffffff;
+  }
+  input {
+    width: 500px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.34);
+    border: none;
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: bold;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+    &::placeholder {
+      font-size: 16px;
+      color: #ffffff;
+      font-weight: bold;
+    }
+  }
+}
